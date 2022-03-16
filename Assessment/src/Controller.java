@@ -1,15 +1,15 @@
 import java.lang.reflect.Field;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Controller {
 
-	static BookDAO bookdao = BookDAO.getInstance();	
+	static BooksDAO bookdao = BooksDAO.getInstance();	
 	static ArrayList<MenuFunction> mainMenu = new ArrayList<MenuFunction>();
 	static String lineBreaker = "-------------------------";
 	static int menuChoice;
 	static Scanner in;
+	ArrayList<Book> books;
 	
 	public void testFunction() {
 		int id;	
@@ -21,57 +21,46 @@ public class Controller {
 			switch (menuChoice) {
 			
 			case 1:
-				try{
-					ArrayList<Book> books = bookdao.getAllBooks(); //maybe do this as a stream?
-					for(Book b : books) {
-						msg(b.toString()); //works but i want to sort out the toString() to print nicer later on
-					}
+				books = bookdao.getAllBooks(); //maybe do this as a stream?
+				for(Book b : books) {
+					msg(b.toString()); //works but i want to sort out the toString() to print nicer later on
 				}
-				catch(SQLException e) {}
 				break;
 				
 			case 2:
 				msg("Please enter the book ID you wish to search by");
 				int book_id = getInputIntFromUser();
-				try{msg(bookdao.getBook(book_id));}
-				catch(SQLException e) {}
+				msg(bookdao.getBook(book_id));
 				break;
 				
 			case 3:
 				Book newbook = newBook();
-				try{bookdao.insertBook(newbook);}
-				catch(SQLException e ) {}
+				bookdao.insertBook(newbook);
 				break;
 				
 			case 4:
 				msg("Please enter the Book ID");
 				id = getInputIntFromUser();
-				try{
-					ArrayList<Book> books = bookdao.getAllBooks(); //do this as a stream?
-					for(Book b : books) {
-						if(id == b.getBook_id()) {
-							msg("Please enter the new price");
-							int price = getInputIntFromUser();
-							b.setPrice(price);
-							bookdao.updateBook(b);
-						}
+			    books = bookdao.getAllBooks(); //do this as a stream?
+			 	for(Book b : books) {
+					if(id == b.getBook_id()) {
+						msg("Please enter the new price");
+						int price = getInputIntFromUser();
+						b.setPrice(price);
+						bookdao.updateBook(b);
 					}
 				}
-				catch(SQLException e) {}
 				break;
 				
 			case 5:
 				msg("Please enter the Book ID");
 				id = getInputIntFromUser();
-				try {bookdao.deleteBook(id);} 
-				catch(SQLException e) {}
+				bookdao.deleteBook(id);
 				break;
 			}
 		}while(menuChoice != 6);
 		in.close();
 	}
-	
-	
 	
 	static <T> void msg(T t) {
 		System.out.println(t);
@@ -163,13 +152,11 @@ public class Controller {
         return b;
     }
 	
-	static int newBookId() {
+	static int newBookId() { //auto generate a book id thats 1 more than the last entered book ID
 		int i = 0;
-		try {
-			ArrayList<Book> books = bookdao.getAllBooks();
-			int j = books.size();
-			i = books.get(j-1).getBook_id() + 1;
-		} catch(SQLException e) {}
+		ArrayList<Book> books = bookdao.getAllBooks();
+		int j = books.size();
+		i = books.get(j-1).getBook_id() + 1;
 		return i;
 	}
 	
