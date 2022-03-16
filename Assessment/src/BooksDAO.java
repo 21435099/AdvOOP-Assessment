@@ -6,15 +6,15 @@ import java.sql.ResultSet;
 import java.util.*;
 
 
-public class BookDAO {
+public class BooksDAO {
 	
-	private static BookDAO instance;
+	private static BooksDAO instance;
 	
-	private BookDAO() {} 
+	private BooksDAO() {} 
 	
-	public static BookDAO getInstance() {
+	public static BooksDAO getInstance() {
 		if (instance == null) 
-			instance = new BookDAO();
+			instance = new BooksDAO();
 		return instance;
 	}
 	//above 3 functions are for lazy instantiation of singleton
@@ -38,7 +38,7 @@ public class BookDAO {
 		return dbConnection;
 	}
 	
-	public ArrayList<Book> getAllBooks() throws SQLException {
+	public ArrayList<Book> getAllBooks(){
 		Connection dbConnection = null;
 		Statement statement = null;
 		ResultSet result = null;
@@ -47,7 +47,7 @@ public class BookDAO {
 		try {
 			dbConnection = getDBConnection();
 			statement = dbConnection.createStatement();
-			result = statement.executeQuery(query); // Execute SQL query and record response to string
+			result = statement.executeQuery(query);
 			while (result.next()) {
 				int book_id = result.getInt("ID");
 				String title = result.getString("Title");
@@ -66,16 +66,16 @@ public class BookDAO {
 			System.out.println("get all books: "+e);
 		} finally {
 			if (result != null)
-				result.close();//SQLException thrown
+				closeResultSet(result);
 			if (statement != null)
-				statement.close();//SQLException thrown
+				closeStatement(statement);
 			if (dbConnection != null)
-				dbConnection.close();//SQLException thrown - ensure closure on all methods using it
+				closeConnection(dbConnection);
 		}
 		return books;
 	}
 	
-	public Book getBook(int id) throws SQLException {
+	public Book getBook(int id) {
 		Book temp = null;
 		Connection dbConnection = null;
 		Statement statement = null;
@@ -86,7 +86,6 @@ public class BookDAO {
 			dbConnection = getDBConnection();
 			statement = dbConnection.createStatement();
 			msg("DBQuery: " + query);
-			// execute SQL query
 			result = statement.executeQuery(query);
 			while (result.next()) {
 				int book_id = result.getInt("ID");
@@ -105,16 +104,16 @@ public class BookDAO {
 		}catch(SQLException e) {
 		} finally {
 			if (result != null)
-				result.close();//SQL Exception thrown
+				closeResultSet(result);
 			if (statement != null)
-				statement.close();//SQL Exception thrown
-			if (dbConnection != null) 
-				dbConnection.close();//SQL Exception thrown
+				closeStatement(statement);
+			if (dbConnection != null)
+				closeConnection(dbConnection);
 		}
 		return temp;
 	}
 	
-	public Boolean deleteBook(int book_id) throws SQLException {
+	public Boolean deleteBook(int book_id){
 		System.out.println("Deleting book");
 		Connection dbConnection = null;
 		Statement statement = null;
@@ -123,25 +122,19 @@ public class BookDAO {
 		try {
 			dbConnection = getDBConnection();
 			statement = dbConnection.createStatement();
-			System.out.println(query);
-			// execute SQL query
+			msg(query);
 			result = statement.executeUpdate(query);
-		} catch(SQLException e) {
-			//do anything?
-		}
+		} catch(SQLException e){ msg(e.getMessage()); }
 		finally {
-			if (statement != null) 
-				statement.close();
+			if (statement != null)
+				closeStatement(statement);
 			if (dbConnection != null)
-				dbConnection.close();
+				closeConnection(dbConnection);
 		}
-		if (result == 1) 
-			return true;
-		else 
-			return false;
+		return (result == 1); 
 	}
 	
-	public boolean insertBook(Book in) throws SQLException{
+	public boolean insertBook(Book in){
 		Connection dbConnection = null;
 		Statement statement = null;
 		String update = "INSERT INTO books (ID, Title, Author, Year, Edition, Publisher, ISBN, Cover, Condition, Price, Notes) " + 
@@ -163,21 +156,20 @@ public class BookDAO {
 					dbConnection = getDBConnection();
 					statement = dbConnection.createStatement();
 					System.out.println(update);
-					// execute SQL query
 					statement.executeUpdate(update);
 					ok = true;
 				} catch (SQLException e) {
 					msg(e.getMessage());
 				} finally {
-					if (statement != null) 
-						statement.close();
-					if (dbConnection != null) 
-						dbConnection.close();
+					if (statement != null)
+						closeStatement(statement);
+					if (dbConnection != null)
+						closeConnection(dbConnection);
 				}
 			return ok;
 	}
 	
-	public Boolean updateBook(Book book) throws SQLException { //probably only need to set price?
+	public Boolean updateBook(Book book) { 
 		Connection dbConnection = null;
 		Statement statement = null;
 		String query = "UPDATE books " +
@@ -197,22 +189,96 @@ public class BookDAO {
 		try {
 			dbConnection = getDBConnection();
 			statement = dbConnection.createStatement();
-			System.out.println(query);
-			// execute SQL update
+			msg(query);
 			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			msg(e.getMessage());
+			return false;
+		} finally {
+			if (statement != null)
+				closeStatement(statement);
+			if (dbConnection != null)
+				closeConnection(dbConnection);
+		}
+		return true;
+	}
+	
+	public Boolean usernameMatch(String username) {
+		Connection dbConnection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		Boolean exists;
+		String query = "SELECT * FROM users WHERE username LIKE '" + username + "';";
+		try {
+			dbConnection = getDBConnection();
+			statement = dbConnection.createStatement();
+			System.out.println(query);
+			result = statement.executeQuery(query);
+			msg(result.getString("username"));
+			exists =  (result.getString("username").equals(username));
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 			return false;
 		} finally {
-			if (statement != null) 
-				statement.close();
+			if (result != null)
+				closeResultSet(result);
+			if (statement != null)
+				closeStatement(statement);
 			if (dbConnection != null) 
-				dbConnection.close();
+				closeConnection(dbConnection);
+		} return exists;
+	}
+	
+	public Boolean passwordMatch(String username, String password) {
+		Connection dbConnection = null;
+		Statement statement = null;
+		ResultSet result = null;
+		Boolean match;
+		String query = "SELECT * FROM users WHERE username LIKE '" + username + "';";
+		try {
+			dbConnection = getDBConnection();
+			statement = dbConnection.createStatement();
+			msg(query);
+			result = statement.executeQuery(query);
+			String dbPassword = MD5.getMd5(result.getString("password"));
+			match = (dbPassword.equals(password));
+		} catch (SQLException e) {
+			msg(e.getMessage());
+			return false;
+		} finally {
+			if (result != null)
+				closeResultSet(result);
+			if (statement != null)
+				closeStatement(statement);
+			if (dbConnection != null) 
+				closeConnection(dbConnection);
+		} return match;
+	}
+	
+	private void closeResultSet(ResultSet result) {
+		try {
+			result.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage() );
 		}
-		return true;
+	}
+	
+	private void closeStatement(Statement statement) {
+		try {
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage() );
+		}
+	}
+	
+	private void closeConnection(Connection dbConnection) {
+		try {
+			dbConnection.close();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage() );
+		}
 	}
 
-	
 	static <T> void msg(T t) {
 		System.out.println(t);
 	}
