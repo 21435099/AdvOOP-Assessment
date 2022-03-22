@@ -148,16 +148,8 @@ public class Controller {
             	j++;
             }
         }
-        Book b = new Book(newBookId(), strings[0], strings[1], ints[0], ints[1], strings[2], strings[3], strings[4], strings[5], ints[2], strings[6]);
+        Book b = new Book(strings[0], strings[1], ints[0], ints[1], strings[2], strings[3], strings[4], strings[5], ints[2], strings[6]);
         return b;
     }
-	
-	static int newBookId() { //auto generate a book id thats 1 more than the last entered book ID
-		int i = 0;
-		ArrayList<Book> books = bookdao.getAllBooks();
-		int j = books.size();
-		i = books.get(j-1).getBook_id() + 1;
-		return i;
-	}
 	
 }

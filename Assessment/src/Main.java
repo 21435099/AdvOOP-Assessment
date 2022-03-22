@@ -18,13 +18,22 @@ public class Main {
 			msg(e.getMessage());
 		};
 		
-		server.createContext("/", new RootHandler() );
-		server.createContext("/DisplayBooks", new DisplayBooksHandler() );
-		server.createContext("/Login", new LoginHandler() );
-		server.createContext("/LoginAction", new LoginProcessHandler() );
+		server.createContext("/", new LoginHandler() );
+		server.createContext("/loginaction", new ProcessLoginHandler() );
+		server.createContext("/displaybooks", new BooksHandler() );
+	    server.createContext("/addbook", new AddBookHandler() );
+	    server.createContext("/addbookaction", new ProcessAddBookHandler() );
+	    server.createContext("/deletebookaction", new ProcessDeleteBookHandler() );
+	    server.createContext("/editbook", new EditBookHandler() );
+	    server.createContext("/editbookaction", new ProcessEditBookHandler() );
+	    server.createContext("/success", new SuccessHandler() );
+		server.createContext("/fail", new FailHandler() );
 	    server.setExecutor(null);
 	    server.start();
 	    msg("The server is listening on port " + PORT);
+	    
+	    //Controller c = new Controller();
+	    //c.testFunction();
 	}
 	
 	static <T> void msg(T t) {
