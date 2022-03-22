@@ -18,7 +18,7 @@ public class BooksDAO {
 		return instance;
 	}
 	//above 3 functions are for lazy instantiation of singleton
-	//only allow for generations of 1 BookDAO object
+	//only allow for generations of 1 BooksDAO object
 
 	private static Connection getDBConnection() { 
 		Connection dbConnection = null;
@@ -137,9 +137,8 @@ public class BooksDAO {
 	public boolean insertBook(Book in){
 		Connection dbConnection = null;
 		Statement statement = null;
-		String update = "INSERT INTO books (ID, Title, Author, Year, Edition, Publisher, ISBN, Cover, Condition, Price, Notes) " + 
-		"VALUES ("+
-				in.getBook_id()+",'"+
+		String update = "INSERT INTO books (Title, Author, Year, Edition, Publisher, ISBN, Cover, Condition, Price, Notes) " + 
+		"VALUES ('"+
 				in.getTitle()+"','"+
 				in.getAuthor()+"',"+
 				in.getYear()+","+
@@ -173,8 +172,7 @@ public class BooksDAO {
 		Connection dbConnection = null;
 		Statement statement = null;
 		String query = "UPDATE books " +
-				"SET ID = '" + book.getBook_id() + "'," + 
-				"Title = '"+ book.getTitle() + "'," + 
+				"SET Title = '"+ book.getTitle() + "'," + 
 				"Author= '" + book.getAuthor() + "'," + 
 				"Year= '" + book.getYear() + "'," + 
 				"Edition= '" + book.getEdition() + "'," +
