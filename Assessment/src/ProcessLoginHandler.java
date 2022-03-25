@@ -27,19 +27,19 @@ public class ProcessLoginHandler implements HttpHandler {
 	    String password = MD5.getMd5(map.get("password"));
 	    
 	    if(username.isEmpty()){
-	    	he.getResponseHeaders().add("Location", "/?err1");
+	    	he.getResponseHeaders().add("Location", "/login?err1");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    } else if(bookdao.usernameMatch(username) == false) {
-	    	he.getResponseHeaders().add("Location", "/?err2");
+	    	he.getResponseHeaders().add("Location", "/login?err2");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    } else if (bookdao.passwordMatch(username, password) == false) {
-	    	he.getResponseHeaders().add("Location", "/?err3");
+	    	he.getResponseHeaders().add("Location", "/login?err3");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    } else if (bookdao.passwordMatch(username, password)){
-	    	he.getResponseHeaders().add("Location", "/displaybooks");
+	    	he.getResponseHeaders().add("Location", "/adminoptions");
 	    	he.sendResponseHeaders(302,0);
 	    	return;
 	    }

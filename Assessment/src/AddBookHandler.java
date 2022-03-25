@@ -21,31 +21,29 @@ public class AddBookHandler implements HttpHandler{
 	 * in ideal world, inputs would be pre-populated with old responses on redirect, but difficult to do without servlets
 	 */
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err1"))
+	if(he.getRequestURI().toString().equals("/addbook?err1"))
 		titleError = "Title cannot be blank, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err2"))
+	if(he.getRequestURI().toString().equals("/addbook?err2"))
 		authorError = "Author cannot be blank, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err3"))
+	if(he.getRequestURI().toString().equals("/addbook?err3"))
 		isbnError = "ISBN must be a number with no letters or symbols, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err4"))
+	if(he.getRequestURI().toString().equals("/addbook?err4"))
 		isbnError = "ISBN should be 10 or 13 numbers long, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err5"))
+	if(he.getRequestURI().toString().equals("/addbook?err5"))
 		isbnError = "ISBN is invalid, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err6"))
+	if(he.getRequestURI().toString().equals("/addbook?err6"))
 		yearError = "Year must be a number with no letters or symbols, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err7"))
+	if(he.getRequestURI().toString().equals("/addbook?err7"))
 		editionError = "Edition must be a number with no letters or symbols, please try again";
 	
-	if(he.getRequestURI().toString().equals("/addbook/?err8"))
+	if(he.getRequestURI().toString().equals("/addbook?err8"))
 		priceError = "Price must be a number in pence with no currency symbols or decimal places, please try again";
-
-    System.out.println(he.getRequestURI().toString());
 	
 	BufferedWriter out = new BufferedWriter(  
             new OutputStreamWriter(he.getResponseBody() ));
@@ -113,8 +111,8 @@ public class AddBookHandler implements HttpHandler{
 				"<input type=\"submit\" value=\"Submit\">  "+
 	  	      	"</form>" + 
 				"<br><br>" +
-	  	      	"<h2>Return to book table</h2>" +
-				"<a href=\"/displaybooks\"> Click here</a>" +
+	  	      	"<h2>Return to admin options</h2>" +
+				"<a href=\"/adminoptions\"> Click here</a>" +
 				"<br><br>" +
 				"</div>" +
 				"</body>" +

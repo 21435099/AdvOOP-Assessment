@@ -39,13 +39,13 @@ public class ProcessAddBookHandler implements HttpHandler {
 	     */
 	    
 	    if(title.isEmpty()){
-	    	he.getResponseHeaders().add("Location", "/addbook/?err1");
+	    	he.getResponseHeaders().add("Location", "/addbook?err1");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
 	    
 	    if(author.isEmpty()) {
-	    	he.getResponseHeaders().add("Location", "/addbook/?err2");
+	    	he.getResponseHeaders().add("Location", "/addbook?err2");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
@@ -58,19 +58,19 @@ public class ProcessAddBookHandler implements HttpHandler {
 	     */
 
 	    if((!Util.testIsbnIsNum(isbn)) && (!isbn.isEmpty())) {
-    		he.getResponseHeaders().add("Location", "/addbook/?err3");
+    		he.getResponseHeaders().add("Location", "/addbook?err3");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
     	}
 	    
 	    if((isbn.length() != 13 && isbn.length() != 10) && (!isbn.isEmpty())) {
-	    	he.getResponseHeaders().add("Location", "/addbook/?err4");
+	    	he.getResponseHeaders().add("Location", "/addbook?err4");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
 	    
 	    if ((!Util.isIsbnValid(isbn)) && (!isbn.isEmpty())) {
-    		he.getResponseHeaders().add("Location", "/addbook/?err5");
+    		he.getResponseHeaders().add("Location", "/addbook?err5");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
@@ -81,19 +81,19 @@ public class ProcessAddBookHandler implements HttpHandler {
 	     */
 	    
 	    if((Util.testStringToInt(year) == false) && (!year.isEmpty())) {
-	    	he.getResponseHeaders().add("Location", "/addbook/?err6");
+	    	he.getResponseHeaders().add("Location", "/addbook?err6");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
 	    
 	    if((Util.testStringToInt(edition) == false) && (!edition.isEmpty())) {
-	    	he.getResponseHeaders().add("Location", "/addbook/?err7");
+	    	he.getResponseHeaders().add("Location", "/addbook?err7");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
 	    
 	    if((Util.testStringToInt(price) == false) && (!price.isEmpty())) {
-	    	he.getResponseHeaders().add("Location", "/addbook/?err8");
+	    	he.getResponseHeaders().add("Location", "/addbook?err8");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }
@@ -126,10 +126,10 @@ public class ProcessAddBookHandler implements HttpHandler {
 	    if(bookdao.insertBook(b) == true) { 
 	    	//why does this call the function multiple times if I try to use out.write() from the above? 
 	    	//can only get this to work if I redirect instead
-	    	he.getResponseHeaders().add("Location", "/success");
+	    	he.getResponseHeaders().add("Location", "/success?ab");
 	    	he.sendResponseHeaders(302, 0);
 	    } else { //dont think this should be reachable but should cover it just in case
-	    	he.getResponseHeaders().add("Location", "/fail");
+	    	he.getResponseHeaders().add("Location", "/fail?ab");
 	    	he.sendResponseHeaders(302, 0);
 	    }
     }

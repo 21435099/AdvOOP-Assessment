@@ -87,5 +87,15 @@ public class Util {
 			return true;
 	 }
 	 
+	 static boolean testStringsAllEmpty(String...strings) {
+		 boolean allBlank = true;
+		 for(String s : strings) {
+			 if(!s.isEmpty()) {
+				 return false;
+			 }
+		 }
+		 return allBlank;
+	 }
+	 
 	
 }

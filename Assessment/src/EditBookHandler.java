@@ -20,8 +20,8 @@ public class EditBookHandler implements HttpHandler{ //need to change orientatio
 		 * function that we made, then find the associated book
 		 */
 		
-		String URL = he.getRequestURI().toString();
-		String id = Util.getIdFromUrl(URL);
+		String URI = he.getRequestURI().toString();
+		String id = Util.getIdFromUrl(URI);
 		int idInt = Integer.parseInt(id);
 		
 		Book b = booksdao.getBook(idInt);
@@ -37,9 +37,8 @@ public class EditBookHandler implements HttpHandler{ //need to change orientatio
 		String editionError = "";
 		String priceError = "";
 		
-		/* When adding a book to the table, we used the URI, however its not possible in this case because the book_id will
-		 * also be present, making it difficult to 
-		 * 
+		/*Errors by detection in the URI now use contains instead of equals because the book id is also being passed
+		 * through
 		 */
 		
 		if(he.getRequestURI().toString().contains("/editbook?err1"))
@@ -77,7 +76,7 @@ public class EditBookHandler implements HttpHandler{ //need to change orientatio
 		out.write(
 		    "<html>" +
 		    "<link rel=\"stylesheet\" href=\"https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css\" integrity=\"sha384-TX8t27EcRE3e/ihU7zmQxVncDAy5uIKz4rEkgIXeMed4M0jlfIDPvg6uqKI2xXr2\" crossorigin=\"anonymous\">" +
-		    "<head> <title>Book Library</title> </head>" +
+		    "<head> <title>Edit Book in Library</title> </head>" +
 		    "<body>" +
 		    "<div class=\"container\">" +
 		    "<h1>Edit Book</h1>" +

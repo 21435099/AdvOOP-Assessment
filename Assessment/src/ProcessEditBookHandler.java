@@ -111,11 +111,11 @@ static BooksDAO bookdao = BooksDAO.getInstance();
 	    if(bookdao.updateBook(b) == true) { 
 	    	//why does this call the function multiple times if I try to use out.write() from the above? 
 	    	//can only get this to work if I redirect instead
-	    	he.getResponseHeaders().add("Location", "/success");
+	    	he.getResponseHeaders().add("Location", "/success?eb");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    } else { //dont think this should be reachable but should cover it just in case
-	    	he.getResponseHeaders().add("Location", "/fail");
+	    	he.getResponseHeaders().add("Location", "/fail?eb");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 	    }

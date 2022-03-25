@@ -17,13 +17,13 @@ public class LoginHandler implements HttpHandler{
 		String usernameError = "";
 		String passwordError = ""; 
 		
-		if(he.getRequestURI().toString().equals("/?err1"))
+		if(he.getRequestURI().toString().equals("/login?err1"))
 			usernameError = "Username cannot be blank, please try again";
 		
-		if(he.getRequestURI().toString().equals("/?err2"))
+		if(he.getRequestURI().toString().equals("/login?err2"))
 			usernameError = "Username is not recognised, please try again";
 		
-		if(he.getRequestURI().toString().equals("/?err3"))
+		if(he.getRequestURI().toString().equals("/login?err3"))
 			passwordError = "Password is incorrect, please try again";
 
 		
@@ -62,7 +62,8 @@ public class LoginHandler implements HttpHandler{
 			"</table>" +
 			"<input type=\"submit\" value=\"Submit\">  "+
   	      	"</form>" +   
-    	    "</body>" +
+    	    "</div>" +
+  	      	"</body>" +
     	    "</html>"
     	    );
 	    out.close();

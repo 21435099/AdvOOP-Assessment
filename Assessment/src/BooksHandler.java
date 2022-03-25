@@ -61,7 +61,7 @@ public class BooksHandler implements HttpHandler{
 			    "    <td>"+ b.getPrice() + "</td>" +
 			    "    <td>"+ b.getNotes() + "</td>" +
 			    "    <td>" + 
-			    "    <a href=\"/editbook?id=" + b.getBook_id() + "\"> Edit </a>" + 
+			    "    <a href=\"/editbook?id=" + b.getBook_id() + "\"> Edit </a> <br>" + 
 			    "    <a href=\"/deletebookaction?id=" + b.getBook_id() + "\"> Delete </a>" + 
 			    "	 </td>" +
 			    "  </tr>" 
@@ -71,6 +71,7 @@ public class BooksHandler implements HttpHandler{
 	    out.write(
 	    	"</tbody>" +
 			"</table>" +
+			"<a href=\"/adminoptions\"> Back to Admin Options </a><br>" +
 			"<a href=\"/\"> Logout </a>" + 
 			"</div>" +   
 			"</body>" +

@@ -12,7 +12,7 @@ public class ProcessDeleteBookHandler implements HttpHandler {
 	
 	public void handle(HttpExchange he) throws IOException {
 		
-		msg("In DeleteBookProcessHandlerMeow");
+		msg("In DeleteBookProcessHandler");
 		
 		/*book_id to delete is passed through the URL in the form "?id="id, so need to be able to collect id after =. 
 		 * Dont need to use requestStringToMap as only one value needs returning, instead made function
@@ -25,11 +25,11 @@ public class ProcessDeleteBookHandler implements HttpHandler {
 		boolean deleted = bookdao.deleteBook(idInt);
 		
 		if(deleted) {
-			he.getResponseHeaders().add("Location", "/success");
+			he.getResponseHeaders().add("Location", "/success?db");
 	    	he.sendResponseHeaders(302, 0);
 	    	return; 
 		} else {
-			he.getResponseHeaders().add("Location", "/fail");
+			he.getResponseHeaders().add("Location", "/fail?db");
 	    	he.sendResponseHeaders(302, 0);
 	    	return;
 		}
